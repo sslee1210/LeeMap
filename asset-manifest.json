@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/LeeMap/static/css/main.aaad5a43.css",
+    "main.js": "/LeeMap/static/js/main.cdd95740.js",
+    "index.html": "/LeeMap/index.html",
+    "main.aaad5a43.css.map": "/LeeMap/static/css/main.aaad5a43.css.map",
+    "main.cdd95740.js.map": "/LeeMap/static/js/main.cdd95740.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.aaad5a43.css",
+    "static/js/main.cdd95740.js"
+  ]
+}
