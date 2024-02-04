@@ -1,3 +1,3 @@
 # LeeMap
-## (작업중입니다)
+## (작업중...)
 https://sslee1210.github.io/LeeMap/
