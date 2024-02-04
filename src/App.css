@@ -1,3 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: linear-gradient(185deg, #e0b966, #e4d569, #bda94e, #af9a4a);
+  background-repeat: no-repeat;
+}
+
 .borderTop {
   border-top: 1px solid #000;
   margin: 10px 0;
