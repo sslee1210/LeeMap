@@ -63,3 +63,8 @@
   text-decoration: none;
   color: #000;
 }
+
+.favoritelist {
+  height: 300px;
+  overflow-y: scroll;
+}

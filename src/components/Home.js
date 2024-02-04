@@ -18,7 +18,7 @@ function Home() {
   const [cafes, setCafes] = useState([]);
   const [mapCenter, setMapCenter] = useState({ lat: 36.5811, lng: 127.9783 });
   const [map, setMap] = useState(null);
-  const [showFavoriteCafes, setShowFavoriteCafes] = useState(false); // 추가
+  const [showFavoriteCafes, setShowFavoriteCafes] = useState(false);
   const selectedMarkerRef = useRef(null);
   const originalImageRef = useRef(null);
   const infowindowRef = useRef(null);
@@ -40,6 +40,7 @@ function Home() {
       prevFavCafes.filter((favCafe) => favCafe.id !== cafe.id)
     );
   };
+
   const moveToCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -66,68 +67,57 @@ function Home() {
     if (window.kakao && window.kakao.maps) {
       let mapContainer = document.getElementById("map");
 
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            let userLocation = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            };
-            setMapCenter(userLocation);
-
-            let options = {
-              center: new window.kakao.maps.LatLng(
-                userLocation.lat,
-                userLocation.lng
-              ),
-              level: 5,
-            };
-
-            let mapInit = new window.kakao.maps.Map(mapContainer, options);
-            setMap(mapInit);
-          },
-          () => {
-            console.error("Error: The Geolocation service failed.");
-          }
-        );
-      } else {
-        console.error("Error: Your browser doesn't support geolocation.");
-
-        let options = {
+      const initMap = () => {
+        const options = {
           center: new window.kakao.maps.LatLng(mapCenter.lat, mapCenter.lng),
           level: 5,
         };
 
-        let mapInit = new window.kakao.maps.Map(mapContainer, options);
+        const mapInit = new window.kakao.maps.Map(mapContainer, options);
         setMap(mapInit);
+      };
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const userLocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+            setMapCenter(userLocation);
+            initMap();
+          },
+          () => {
+            console.error("Error: The Geolocation service failed.");
+            initMap();
+          }
+        );
+      } else {
+        console.error("Error: Your browser doesn't support geolocation.");
+        initMap();
       }
     }
   }, []);
 
   const searchCafes = () => {
-    // 현재 열려있는 정보창을 닫습니다.
     if (infowindowRef.current) {
       infowindowRef.current.close();
     }
 
-    // 선택된 마커의 이미지를 원래대로 복원합니다.
     if (selectedMarkerRef.current) {
       selectedMarkerRef.current.setImage(originalImageRef.current);
     }
 
-    // 선택된 마커와 정보창을 초기화합니다.
     selectedMarkerRef.current = null;
     infowindowRef.current = null;
     setSelectedCafe(null);
     if (window.kakao && window.kakao.maps) {
-      // 이전에 생성된 마커 삭제
       for (let id in markerRefs.current) {
         markerRefs.current[id].setMap(null);
       }
       markerRefs.current = {};
 
       const API_KEY = "34c1bf4fb787d8d21997bed10d5f165e";
-
       const bounds = map.getBounds();
       const swLatLng = bounds.getSouthWest();
       const neLatLng = bounds.getNorthEast();
@@ -226,7 +216,6 @@ function Home() {
     const marker = markerRefs.current[cafe.id];
     selectMarker(marker, cafe);
 
-    // 카페 위치로 지도 중심 이동
     if (map) {
       const moveLatLng = new window.kakao.maps.LatLng(cafe.y, cafe.x);
       map.setCenter(moveLatLng);
@@ -264,6 +253,7 @@ function Home() {
           favoriteCafes={favoriteCafes}
           cafeReviews={cafeReviews}
           handleReviewChange={handleReviewChange}
+          removeFavoriteCafe={removeFavoriteCafe}
         />
       )}
     </div>

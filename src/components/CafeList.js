@@ -1,12 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import home from "./Home.module.css";
-function CafeList({
-  cafes,
-  selectCafe,
-  favoriteCafes,
-  addFavoriteCafe,
-  removeFavoriteCafe,
-}) {
+
+function CafeList({ cafes, selectCafe, favoriteCafes, addFavoriteCafe }) {
   return (
     <div className={home.cafelists}>
       {cafes.map((cafe) => (
@@ -20,23 +15,23 @@ function CafeList({
           >
             길찾기
           </a>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (favoriteCafes.some((favCafe) => favCafe.id === cafe.id)) {
-                removeFavoriteCafe(cafe);
-              } else {
-                addFavoriteCafe(cafe);
-              }
-            }}
-          >
-            {favoriteCafes.some((favCafe) => favCafe.id === cafe.id)
-              ? "찜 해제"
-              : "찜하기"}
-          </button>
+          <FavoriteButton cafe={cafe} addFavoriteCafe={addFavoriteCafe} />
         </div>
       ))}
     </div>
+  );
+}
+
+function FavoriteButton({ cafe, addFavoriteCafe }) {
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  const handleFavoriteClick = () => {
+    setIsFavorited(!isFavorited);
+    addFavoriteCafe(cafe);
+  };
+
+  return (
+    <button onClick={handleFavoriteClick}>{isFavorited ? "❤️" : "🤍"}</button>
   );
 }
 
